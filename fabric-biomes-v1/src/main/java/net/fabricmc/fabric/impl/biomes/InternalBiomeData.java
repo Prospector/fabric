@@ -16,6 +16,10 @@
 
 package net.fabricmc.fabric.impl.biomes;
 
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import net.fabricmc.fabric.api.biomes.v1.Climate;
+import net.minecraft.world.biome.Biome;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,25 +27,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.fabricmc.fabric.api.biomes.v1.BiomeClimate;
-import net.fabricmc.fabric.api.biomes.v1.RiverAssociates.RiverAssociate;
-import net.minecraft.util.Pair;
-import net.minecraft.world.biome.Biome;
+public final class InternalBiomeData {
 
-public final class BiomeLists
-{
-	private BiomeLists() {}
-	
-	public static final Map<Biome, BiomeAssociate> HILLS_MAP = new HashMap<>();
-	public static final Map<Biome, BiomeAssociate> SHORE_MAP = new HashMap<>();
-	public static final Map<Biome, BiomeAssociate> EDGE_MAP = new HashMap<>();
-	public static final Map<Biome, RiverAssociate> RIVER_MAP = new HashMap<>();
-	public static final Map<Biome, VariantAssociate> VARIANTS_MAP = new HashMap<>();
-	
-	public static final List<Pair<Integer, BiomeClimate>> INJECTED_BIOME_LIST = new ArrayList<>();
-	public static final Map<BiomeClimate, Map<Biome, Integer>> BIOME_WEIGHT_LOOKUP = new HashMap<>();
-	
+	public static final Map<Biome, WeightedBiomePicker> HILLS_MAP = new HashMap<>();
+	public static final Map<Biome, WeightedBiomePicker> SHORE_MAP = new HashMap<>();
+	public static final Map<Biome, WeightedBiomePicker> EDGE_MAP = new HashMap<>();
+	public static final Map<Biome, Biome> RIVER_MAP = new HashMap<>();
+	public static final Map<Biome, VariantAssociate> VARIANT_MAP = new HashMap<>();
+
+	public static final List<ClimateBiomeInjection> INJECTED_BIOMES = new ArrayList<>();
+	public static final Map<Climate, Object2IntMap<Biome>> WEIGHT_MAP = new HashMap<>();
+
 	public static final Set<Biome> CUSTOM_BIOMES = new HashSet<>();
-	
 	public static final Set<Biome> SPAWN_BIOMES = new HashSet<>();
+
 }

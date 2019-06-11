@@ -16,6 +16,12 @@
 
 package net.fabricmc.fabric.mixin.biomes;
 
+import net.fabricmc.fabric.impl.biomes.InternalBiomeData;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.layer.AddRiversLayer;
+import net.minecraft.world.biome.layer.LayerRandomnessSource;
+import net.minecraft.world.biome.layer.LayerSampler;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,35 +29,24 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import net.fabricmc.fabric.api.biomes.v1.RiverAssociates;
-import net.fabricmc.fabric.api.biomes.v1.RiverAssociates.RiverAssociate;
-import net.fabricmc.fabric.impl.biomes.BiomeLists;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.layer.AddRiversLayer;
-import net.minecraft.world.biome.layer.LayerRandomnessSource;
-import net.minecraft.world.biome.layer.LayerSampler;
-
 @Mixin(AddRiversLayer.class)
-public class RiversLayerMixin
-{
+public class MixinAddRiversLayer {
+
 	@Shadow
 	@Final
 	private static int RIVER_ID;
-	
+
 	@Inject(at = @At("HEAD"), method = "sample", cancellable = true)
-	private void sample(LayerRandomnessSource rand, LayerSampler prevBiomeSampler, LayerSampler sampler2, int x, int z, CallbackInfoReturnable<Integer> info)
-	{
-		int previousBiomeId = prevBiomeSampler.sample(x, z);
-		int biome_2 = sampler2.sample(x, z);
-		
-		Biome prevBiome = Registry.BIOME.get(previousBiomeId);
-		
-		if (BiomeLists.RIVER_MAP.containsKey(prevBiome) && biome_2 == RIVER_ID)
-		{
-			RiverAssociate associate = BiomeLists.RIVER_MAP.get(prevBiome);
-			
-			info.setReturnValue(associate == RiverAssociates.NONE ? previousBiomeId : Registry.BIOME.getRawId(associate.getBiome()));
+	private void sample(LayerRandomnessSource random, LayerSampler landLayer, LayerSampler riverLayer, int x, int z, CallbackInfoReturnable<Integer> info) {
+		int landBiomeId = landLayer.sample(x, z);
+		int riverBiomeId = riverLayer.sample(x, z);
+
+		Biome landBiome = Registry.BIOME.get(landBiomeId);
+
+		if (InternalBiomeData.RIVER_MAP.containsKey(landBiome) && riverBiomeId == RIVER_ID) {
+			Biome river = InternalBiomeData.RIVER_MAP.get(landBiome);
+			info.setReturnValue(river == null ? landBiomeId : Registry.BIOME.getRawId(river));
 		}
 	}
+
 }

@@ -17,13 +17,16 @@
 package net.fabricmc.fabric.api.biomes.v1;
 
 /**
- * Enum representing the biome climates of Minecraft.
- * There are four climates, which represent internal groups of biomes.
+ * The four vanilla climates as {@link Climate} objects
  */
-public enum BiomeClimate
-{
+
+public enum VanillaClimate implements Climate {
 	SNOWY,
 	COOL,
 	TEMPERATE,
 	DRY;
+
+	VanillaClimate() {
+
+	}
 }

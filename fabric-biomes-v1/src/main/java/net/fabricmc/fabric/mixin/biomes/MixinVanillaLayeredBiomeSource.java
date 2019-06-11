@@ -16,41 +16,33 @@
 
 package net.fabricmc.fabric.mixin.biomes;
 
-import java.util.Set;
-import java.util.function.Function;
-
+import net.fabricmc.fabric.impl.biomes.InternalBiomeData;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.source.VanillaLayeredBiomeSource;
+import net.minecraft.world.gen.feature.StructureFeature;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import net.fabricmc.fabric.impl.biomes.BiomeLists;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.source.VanillaLayeredBiomeSource;
-import net.minecraft.world.gen.feature.StructureFeature;
+import java.util.function.Function;
 
 @Mixin(VanillaLayeredBiomeSource.class)
-public class VanillaLayeredBiomeSourceMixin
-{
+public class MixinVanillaLayeredBiomeSource {
+
 	@Inject(at = @At("HEAD"), method = "hasStructureFeature", cancellable = true)
-	private void hasStructureFeature(StructureFeature<?> structureFeature, CallbackInfoReturnable<Boolean> info)
-	{
+	private void hasStructureFeature(StructureFeature<?> structureFeature, CallbackInfoReturnable<Boolean> info) {
 		Function<StructureFeature<?>, Boolean> b = (structure) -> {
-			
-			Set<Biome> customBiomeSet = BiomeLists.CUSTOM_BIOMES;
-			
-			for(Biome biome : customBiomeSet)
-			{
-				if (biome.hasStructureFeature(structure))
-				{
+			for (Biome biome : InternalBiomeData.CUSTOM_BIOMES) {
+				if (biome.hasStructureFeature(structure)) {
 					return true;
 				}
 			}
-
 			return false;
 		};
-		
-		if (b.apply(structureFeature).booleanValue())
+		if (b.apply(structureFeature)) {
 			info.setReturnValue(Boolean.TRUE);
+		}
 	}
+
 }

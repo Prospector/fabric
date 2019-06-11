@@ -16,18 +16,10 @@
 
 package net.fabricmc.fabric.api.biomes.v1;
 
-import net.fabricmc.fabric.impl.biomes.InternalBiomeData;
-import net.minecraft.world.biome.Biome;
+/**
+ * Enum representing the biome climates of Minecraft.
+ * There are four climates, which represent internal groups of biomes.
+ */
+public interface Climate {
 
-public final class FabricBiomes
-{
-	private FabricBiomes() {}
-	
-	/**
-	 * Adds the biome to spawn biomes, so that the player may spawn in the biome
-	 */
-	public static void addSpawnBiome(Biome biome)
-	{
-		InternalBiomeData.SPAWN_BIOMES.add(biome);
-	}
 }

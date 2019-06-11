@@ -3,12 +3,12 @@
   "package": "net.fabricmc.fabric.mixin.biomes",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "HillsLayerMixin",
-    "EdgeLayerMixin",
-    "RiversLayerMixin",
-    "SetBaseBiomesLayerMixin",
-    "SpawnBiomesMixin",
-    "VanillaLayeredBiomeSourceMixin"
+    "MixinAddHillsLayer",
+    "MixinAddEdgeBiomesLayer",
+    "MixinAddRiversLayer",
+    "MixinBiomeSource",
+    "MixinSetBaseBiomesLayer",
+    "MixinVanillaLayeredBiomeSource"
   ],
   "injectors": {
     "defaultRequire": 1
